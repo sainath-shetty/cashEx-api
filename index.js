@@ -13,7 +13,9 @@ credentials: true,
 }));
 app.use(express.json());
 app.use("api/",rootRouter);
-
+app.get("/test", (req, res) => {
+  res.send("API is working!");
+});
 app.listen(9000,()=>{
     console.log("server started at local host 9000");
 })
