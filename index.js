@@ -12,6 +12,8 @@ methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
 credentials: true,
 }));
 app.use(express.json());
+app.options('*', cors()); // Enable preflight requests for all routes
+
 app.use("/api",rootRouter);
 app.get("/test", (req, res) => {
   res.send("API is working!");
