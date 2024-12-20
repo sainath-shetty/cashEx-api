@@ -6,7 +6,11 @@ connectDb();
 const cors=require("cors");
 const app=express();
 
-app.use(cors());
+app.use(cors({ 
+    origin: "https://cash-ex-frontend.vercel.app", // Replace with your frontend URL
+methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+credentials: true,
+}));
 app.use(express.json());
 app.use("https://cash-ex-api.vercel.app/",rootRouter);
 
