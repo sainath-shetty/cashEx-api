@@ -8,7 +8,7 @@ const app=express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/v1/",rootRouter);
+app.use("https://cash-ex-api.vercel.app/",rootRouter);
 
 app.listen(9000,()=>{
     console.log("server started at local host 9000");
