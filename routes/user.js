@@ -5,6 +5,7 @@ const zod = require('zod');
 const { User, connectDb, Accounts } = require('../db');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
+const bcrypt = require("bcrypt");
 
 
 //creation of zod object
@@ -39,11 +40,12 @@ router.post('/signup', async (req, res) => {
         })
     }
     //if user is not already existing then create one 
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
         username: req.body.username,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        password: req.body.password,
+        password: hashedPassword,
     })
 
     const userId = user._id;
@@ -93,8 +95,13 @@ router.post('/signin', async (req, res) => {
     //if the user is existing in the database
     const user = await User.findOne({
         username: req.body.username,
-        password: req.body.password
+    
     })
+    const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
+if (!isPasswordCorrect) {
+  return res.status(401).json({ message: "Invalid credentials" });
+}
+
     if (!user) {
         return res.status(411).json({
             message: "error while logging"
