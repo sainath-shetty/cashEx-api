@@ -12,7 +12,7 @@ methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
 credentials: true,
 }));
 app.use(express.json());
-app.use("https://cash-ex-api.vercel.app/",rootRouter);
+app.use("api/",rootRouter);
 
 app.listen(9000,()=>{
     console.log("server started at local host 9000");
