@@ -86,39 +86,31 @@ const signinBody = zod.object({
 
 // creating a post request for signin to request send the post request to /app/v1/user/signin
 router.post('/signin', async (req, res) => {
-    const result = signinBody.safeParse(req.body);
-    if (!result.success) {
-        return res.status(400).json({
-            message: " Invalid inputs",
-        })
+    try {
+        const result = signinBody.safeParse(req.body);
+        if (!result.success) {
+            return res.status(400).json({ message: "Invalid inputs" });
+        }
+
+        const user = await User.findOne({ username: req.body.username });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
+
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+        return res.status(200).json({ message: "User signed in successfully", token });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-    //if the user is existing in the database
-    const user = await User.findOne({
-        username: req.body.username,
-    
-    })
-    const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
-if (!isPasswordCorrect) {
-  return res.status(401).json({ message: "Invalid credentials" });
-}
+});
 
-    if (!user) {
-        return res.status(411).json({
-            message: "error while logging"
-        })
-
-    }
-    const userId = user._id;
-    const token = jwt.sign({
-        userId
-    }, JWT_SECRET);
-    return res.status(200).json({
-        message: "user signedin successfully",
-        token: token
-    })
-
-
-})
 
 //update the user 
 

@@ -6,14 +6,19 @@ connectDb();
 const cors = require("cors");
 const app = express();
 // Enable preflight requests for all routes
+
 app.use(cors({
-    origin: "https://cash-ex-frontend.vercel.app", // Replace with your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+    origin: "*", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Include OPTIONS method
+    allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+    credentials: true, // If using cookies or other credentials
 }));
+app.options("*", cors()); // Handle preflight requests for all routes
+
 app.use(express.json());
 
 
-app.use("/api", rootRouter);
+app.use("/api/v1", rootRouter);
 app.get("/test", (req, res) => {
     res.send("API is working!");
 });
