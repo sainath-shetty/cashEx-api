@@ -4,8 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel ./backend -d ./dist"
+
+    "start": "node index.js", 
+
+    "dev": "nodemon index.js", 
+
+    "build": "npm run build-prod", 
+
+    "vercel-build": "your-build-command" 
+
   },
   "keywords": [],
   "author": "",
