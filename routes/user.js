@@ -4,7 +4,9 @@ const authMiddleware = require('../middleware');
 const zod = require('zod');
 const { User, connectDb, Accounts } = require('../db');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('../config');
+require('dotenv').config();
+
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const bcrypt = require("bcrypt");
 
 
@@ -65,7 +67,7 @@ router.post('/signup', async (req, res) => {
     }
     const token = jwt.sign({
         userId
-    }, JWT_SECRET);
+    }, jwtSecretKey);
     res.json({
         message: "User created successfully",
         token: token
@@ -103,7 +105,7 @@ router.post('/signin', async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+        const token = jwt.sign({ userId: user._id }, jwtSecretKey);
         return res.status(200).json({ message: "User signed in successfully", token });
     } catch (error) {
         console.error(error);
