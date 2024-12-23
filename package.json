@@ -9,9 +9,8 @@
 
     "dev": "nodemon index.js", 
 
-    "build": "npm run build-prod", 
+    "build": "npm run build-prod" 
 
-    "vercel-build": "your-build-command" 
 
   },
   "keywords": [],
